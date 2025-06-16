@@ -11,7 +11,9 @@ export const validInput = (req, res, next) => {
   }
   // Ensure completed is a boolean if provided
   if (completed !== undefined && typeof completed !== 'boolean') {
-    return res.status(400).json({ message: 'Task status must be a true or false' });
+    return res
+      .status(400)
+      .json({ message: 'Task status must be a true or false' });
   }
 
   next();

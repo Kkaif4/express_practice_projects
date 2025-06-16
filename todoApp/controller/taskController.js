@@ -64,7 +64,7 @@ export const updateTask = async (req, res) => {
   }
 };
 
-
+//delete a task by id
 export const deleteTask = async (req, res) => {
   const { id } = req.params;
   try {
