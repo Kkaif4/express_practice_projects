@@ -17,12 +17,11 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Todo App API');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  connectDB();
-});
-
 // manage wrong api
 app.use((req, res) => {
   res.status(404).json({ message: 'API not found' });
+});
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  connectDB();
 });

@@ -44,6 +44,7 @@ export const createTask = async (req, res) => {
     res.status(500).json({ message: 'Error creating task', error });
   }
 };
+
 // update the task
 export const updateTask = async (req, res) => {
   const { id } = req.params;
