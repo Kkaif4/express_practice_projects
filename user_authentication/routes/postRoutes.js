@@ -13,7 +13,7 @@ const router = express.Router();
 // router.get('/', getAllPosts);
 router.get('/', getUsersPost);
 
-router.get('/user/:username/:postId', getPostsOfUserByPostId);
+router.get('/:postId', getPostsOfUserByPostId);
 
 router.post('/create-post/', createPost);
 router.patch('/publish-post/:postId', publishPost);

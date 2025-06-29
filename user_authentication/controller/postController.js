@@ -45,9 +45,10 @@ export const getUsersPost = async (req, res, next) => {
 };
 
 export const getPostsOfUserByPostId = async (req, res, next) => {
-  const { username, postId } = req.params;
+  const { postId } = req.params;
+  const { id } = req.user;
   try {
-    const user = await User.find({ username });
+    const user = await User.findById({ _id: id });
     if (!user) {
       const error = new Error(`user not found of this username ${username}`);
       error.status = 400;
