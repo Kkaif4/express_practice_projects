@@ -1,19 +1,19 @@
 import mongoose from 'mongoose';
 
-const postSchema = new mongoose.Schema({
-  authorId: {
+// this is the draft model, but it is not used yet. I'll implement this later.
+
+const draftSchema = new mongoose.Schema({
+  postId: {
     type: String,
     required: true,
   },
   title: {
     type: String,
-    default: '',
   },
   content: {
     type: String,
-    default: '',
   },
-  category: {
+  categories: {
     type: [String],
     default: [],
   },
@@ -28,15 +28,7 @@ const postSchema = new mongoose.Schema({
   publishedAt: {
     type: Date,
   },
-  publishedId: {
-    type: String,
-  },
-  status: {
-    type: String,
-    enum: ['draft', 'published'],
-    default: 'draft',
-  },
 });
 
-const Post = mongoose.model('Post', postSchema);
-export default Post;
+const Draft = mongoose.model('Draft', draftSchema);
+export default Draft;

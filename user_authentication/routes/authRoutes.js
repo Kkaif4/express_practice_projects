@@ -1,14 +1,10 @@
 import express from 'express';
-import {
-  getAllPosts,
-  getPostsByUser,
-  getPostsByUserId,
-} from '../controller/postController.js';
+import { login, register } from '../controller/authController.js';
+import { checkRegisterInfo } from '../middleware/protect.js';
 
 const router = express.Router();
 
-router.get('/posts', getAllPosts);
-router.get('/posts/:user', getPostsByUser);
-router.get('/posts/:user/:id', getPostsByUserId);
+router.post('/register', checkRegisterInfo, register);
+router.post('/login', login);
 
 export default router;

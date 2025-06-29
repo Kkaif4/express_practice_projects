@@ -1,3 +1,6 @@
+import jwt from 'jsonwebtoken';
+import { jwtDecode } from 'jwt-decode';
+
 export const checkRegisterInfo = (req, res, next) => {
   const body = req.body;
   if (!body || typeof body !== 'object') {
@@ -10,7 +13,6 @@ export const checkRegisterInfo = (req, res, next) => {
     'email',
     'password',
   ];
-
   for (const field of requiredFields) {
     const value = body[field];
     if (!value || typeof value !== 'string' || value.trim() === '') {
@@ -20,7 +22,22 @@ export const checkRegisterInfo = (req, res, next) => {
   next();
 };
 
-export const protect = (req, res, next) => {};
+export const validateToken = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return next(new Error('token not found'));
+  }
+  const decode = jwtDecode(token);
+  req.user = decode;
+  next();
+};
 
-export const validateToken = (req, res, next) => {};
-
+export const validateAdmin = (req, res, next) => {
+  const { isAdmin } = req.user;
+  if (!isAdmin) {
+    const error = new Error('you are unauthorized !');
+    error.status = 403;
+    return next(error);
+  }
+  next();
+};
