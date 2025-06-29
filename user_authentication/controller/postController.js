@@ -154,7 +154,6 @@ export const updatePost = async (req, res, next) => {
   const { postId } = req.params;
   const { title, content, category } = req.body;
   const user = await User.findById({ _id: id });
-  console.log(user.username);
   if (!user) {
     const error = new Error(`user not found of this username ${user.username}`);
     error.status = 400;

@@ -2,11 +2,9 @@ import User from '../models/user.js';
 import Post from '../models/posts.js';
 export const getAllUser = async (req, res, next) => {
   try {
-    console.log('finding all users');
     const users = await User.find().select('-password');
     res.json({ message: 'users found', data: users, success: true });
   } catch (err) {
-    console.log('user found error', err.message);
     const error = new Error(err.message);
     error.status = 400;
     return next(error);
