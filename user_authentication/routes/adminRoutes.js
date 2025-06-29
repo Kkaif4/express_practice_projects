@@ -6,4 +6,5 @@ const router = express.Router();
 
 router.get('/users', validateToken, validateAdmin, getAllUser);
 router.get('/posts', validateToken, validateAdmin, getAllPosts);
+
 export default router;

@@ -10,7 +10,6 @@ import {
 
 const router = express.Router();
 
-// router.get('/', getAllPosts);
 router.get('/', getUsersPost);
 
 router.get('/:postId', getPostsOfUserByPostId);

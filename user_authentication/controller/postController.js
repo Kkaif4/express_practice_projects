@@ -39,7 +39,7 @@ export const getUsersPost = async (req, res, next) => {
     res.json({ message: 'post found', data: userPosts, success: true });
   } catch (err) {
     const error = new Error(err.message);
-    error.status = 400;
+    error.status = 400;z
     return next(error);
   }
 };
