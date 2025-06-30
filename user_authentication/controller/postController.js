@@ -1,6 +1,6 @@
 import User from '../models/user.js';
 import Post from '../models/posts.js';
-import Draft from '../models/draft.js';
+// import Draft from '../models/draft.js';
 
 export const getAllPosts = async (req, res, next) => {
   try {
@@ -22,14 +22,8 @@ export const getUsersPost = async (req, res, next) => {
   const { id } = req.user;
   try {
     const user = await User.findOne({ _id: id }).select('-password');
-    if (!user) {
-      const error = new Error(`User not found with username ${user.username}`);
-      error.status = 400;
-      return next(error);
-    }
     const userPosts = await Post.find({
       authorId: user._id,
-      status: 'published',
     });
     if (!userPosts || userPosts.length === 0) {
       const error = new Error(`post not found of this user ${user.username}`);
@@ -46,17 +40,12 @@ export const getUsersPost = async (req, res, next) => {
   }
 };
 
-export const getPostsOfUserByPostId = async (req, res, next) => {
-  const { postId } = req.params;
+export const getUserPostById = async (req, res, next) => {
   const { id } = req.user;
+  const { postId } = req.params;
   try {
     const user = await User.findById({ _id: id }).select('-password');
-    if (!user) {
-      const error = new Error(`user not found of this username ${username}`);
-      error.status = 400;
-      return next(error);
-    }
-    const post = await Post.find({ authorId: user._id });
+    const post = await Post.find({ authorId: user._id, _id: postId });
     if (!post) {
       const error = new Error(`post not found of this id ${postId}`);
       error.status = 400;
@@ -72,24 +61,9 @@ export const getPostsOfUserByPostId = async (req, res, next) => {
 
 export const createPost = async (req, res, next) => {
   const { id } = req.user;
-  if (!isValid) {
-    const error = new Error('user is not validated, cannot create post');
-    error.status = 400;
-    return next(error);
-  }
-  if (req.body === null) {
-    const error = new Error('cannot create incomplete post');
-    error.status = 400;
-    return next(error);
-  }
   const { title, content, category } = req.body;
   try {
     const user = await User.findById({ _id: id }).select('-password');
-    if (!user) {
-      const error = new Error(`user not found of this username ${username}`);
-      error.status = 400;
-      return next(error);
-    }
     await user.save();
     const postCount = user.postCount + 1;
     const newPost = {
@@ -120,13 +94,6 @@ export const publishPost = async (req, res, next) => {
   const { id } = req.user;
   try {
     const user = await User.findById({ _id: id }).select('-password');
-    if (!user) {
-      const error = new Error(
-        `user not found of this username ${user.username}`
-      );
-      error.status = 400;
-      return next(error);
-    }
     const post = await Post.findOne({ _id: postId, authorId: user._id });
     if (!post) {
       const error = new Error(`post not found of this user ${user.username}`);
@@ -159,23 +126,17 @@ export const updatePost = async (req, res, next) => {
   const { id } = req.user;
   const { postId } = req.params;
   const { title, content, category } = req.body;
-  const user = await User.findById({ _id: id }).select('-password');
-  if (!user) {
-    const error = new Error(`user not found of this username ${user.username}`);
-    error.status = 400;
-    return next(error);
-  }
-
   try {
+    const user = await User.findById({ _id: id }).select('-password');
     const post = await Post.findOne({ _id: postId, authorId: user._id });
     if (!post) {
       const error = new Error(`post not found of this id ${postId}`);
       error.status = 400;
       return next(error);
     }
-    post.title = title;
-    post.content = content;
-    post.category = category;
+    post.title = title || post.title;
+    post.content = content || post.content;
+    post.category = category || post.category;
     post.updatedAt = Date.now();
     post.status = 'draft';
     await post.save();
@@ -196,13 +157,6 @@ export const deletePost = (req, res, next) => {
   const { postId } = req.params;
   try {
     const user = User.findById({ _id: id }).select('-password');
-    if (!user) {
-      const error = new Error(
-        `user not found of this username ${user.username}`
-      );
-      error.status = 400;
-      return next(error);
-    }
     const post = Post.findOne({
       _id: postId,
       authorId: user._id,

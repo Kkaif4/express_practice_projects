@@ -1,5 +1,6 @@
 import User from '../models/user.js';
 import Post from '../models/posts.js';
+
 export const getAllUser = async (req, res, next) => {
   try {
     const users = await User.find().select('-password');
@@ -27,4 +28,28 @@ export const getAllPosts = async (req, res, next) => {
   }
 };
 
-export const deleteUserById = (req, res, next) => {};
+export const deleteUserById = async (req, res, next) => {
+  const { id } = req.params;
+  await User.findByIdAndDelete({ _id: id })
+    .then((user) => {
+      res.json({ message: 'user deleted', data: user, success: true });
+    })
+    .catch((err) => {
+      const error = new Error(err.message);
+      error.status = 400;
+      return next(error);
+    });
+};
+
+export const deletePostById = async (req, res, next) => {
+  const { id } = req.params;
+  await Post.findByIdAndDelete({ _id: id })
+    .then((post) => {
+      res.json({ message: 'post deleted', data: post, success: true });
+    })
+    .catch((err) => {
+      const error = new Error(err.message);
+      error.status = 400;
+      return next(error);
+    });
+};

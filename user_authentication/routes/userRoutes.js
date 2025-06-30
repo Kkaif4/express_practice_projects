@@ -1,20 +1,16 @@
 import express from 'express';
 import {
-  checkLoginInfo,
+  isUserValid,
   validateToken,
   validateUpdateInfo,
 } from '../middleware/protect.js';
-import {
-  forgotEmail,
-  getUser,
-  updateUser,
-} from '../controller/userController.js';
-import { validate } from '../controller/authController.js';
+import { getUser, updateUser } from '../controller/userController.js';
 
 const router = express.Router();
+router.use(validateToken, isUserValid);
 
-router.get('/', validateToken, getUser);
-router.put('/update', validateToken, validateUpdateInfo, updateUser);
-router.post('/forgot-email', checkLoginInfo, forgotEmail);
+router.get('/', getUser);
+
+router.put('/update', validateUpdateInfo, updateUser);
 
 export default router;

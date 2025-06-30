@@ -69,7 +69,7 @@ export const emailFormat = `
         <p>If you didn’t request this, you can safely ignore this email.</p>
       </div>
       <div class="footer">
-        &copy; 2025 Futurio Systems — All Rights Reserved.
+        &copy; 2025 User Authentication — All Rights Reserved.
       </div>
     </div>
   </body>

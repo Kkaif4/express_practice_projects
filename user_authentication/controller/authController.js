@@ -29,7 +29,7 @@ export const register = async (req, res, next) => {
       { id: user.id, isAdmin: newUser.isAdmin, isValid: newUser.isValid },
       process.env.JWT_SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: '1d',
       }
     );
     sendVerificationEmail(email, code)
@@ -56,7 +56,7 @@ export const register = async (req, res, next) => {
 
 export const validate = async (req, res, next) => {
   const { id } = req.user;
-  const { code } = req.body;
+  const { code } = req.body || {};
   if (!code) return next(new Error('verification code is required'));
   try {
     const user = await User.findById({ _id: id }).select('-password');
@@ -110,7 +110,7 @@ export const login = async (req, res, next) => {
       { id: user._id, isAdmin: user.isAdmin, isValid: user.isValid },
       process.env.JWT_SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: '1d',
       }
     );
     console.log('user logged in successfully');
@@ -122,4 +122,4 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const logout = (req, res, next) => {};
+export const logout = async (req, res, next) => {};

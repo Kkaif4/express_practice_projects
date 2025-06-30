@@ -2,29 +2,28 @@ import express from 'express';
 import {
   createPost,
   deletePost,
-  getPostsOfUserByPostId,
+  getUserPostById,
   getUsersPost,
   publishPost,
   updatePost,
 } from '../controller/postController.js';
 import { isUserValid, validateToken } from '../middleware/protect.js';
+import { checkPostId, emptyPost } from '../middleware/postDataHandler.js';
 
 const router = express.Router();
 
-router.get('/', isUserValid, getUsersPost);
+router.use(validateToken, isUserValid);
 
-router.get('/:postId', validateToken, isUserValid, getPostsOfUserByPostId);
+router.get('/', getUsersPost);
 
-router.post('/create-post/', validateToken, isUserValid, createPost);
-router.patch('/publish-post/:postId', validateToken, isUserValid, publishPost);
+router.get('/:postId', checkPostId, getUserPostById);
 
-router.put('/update/:postId', validateToken, isUserValid, updatePost);
+router.post('/create-post', emptyPost, createPost);
 
-router.delete(
-  '/delete/:username/:postId',
-  validateToken,
-  isUserValid,
-  deletePost
-);
+router.patch('/publish-post/:postId', checkPostId, publishPost);
+
+router.put('/update/:postId', checkPostId, emptyPost, updatePost);
+
+router.delete('/delete/:username/:postId', deletePost);
 
 export default router;
