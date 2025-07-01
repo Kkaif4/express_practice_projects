@@ -4,7 +4,13 @@ import mongoose from 'mongoose';
 
 const draftSchema = new mongoose.Schema({
   postId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+    required: true,
+  },
+  authorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
   title: {
@@ -13,16 +19,13 @@ const draftSchema = new mongoose.Schema({
   content: {
     type: String,
   },
-  categories: {
+  category: {
     type: [String],
     default: [],
   },
   updatedAt: {
     type: Date,
     default: Date.now(),
-  },
-  publishedAt: {
-    type: Date,
   },
 });
 

@@ -2,6 +2,7 @@ import express from 'express';
 import {
   createPost,
   deletePost,
+  getAllPosts,
   getUserPostById,
   getUsersPost,
   publishPost,
@@ -15,6 +16,8 @@ const router = express.Router();
 router.use(validateToken, isUserValid);
 
 router.get('/', getUsersPost);
+
+router.get('/posts', getAllPosts);
 
 router.get('/:postId', checkPostId, getUserPostById);
 
