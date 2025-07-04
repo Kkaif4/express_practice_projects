@@ -7,7 +7,8 @@ export const getAllPosts = async (req, res, next) => {
   const query = { status: 'published' };
   const L = limit ? parseInt(limit) : 3;
   const P = page ? parseInt(page) : 1;
-  if (date) {
+  const parseDate = new Date(date);
+  if (parseDate.getTime()) {
     query.createdAt = { $gte: date };
   }
   if (author) {

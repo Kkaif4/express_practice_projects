@@ -2,7 +2,7 @@ import User from '../models/user.js';
 import Post from '../models/posts.js';
 
 export const getAllUser = async (req, res, next) => {
-  const { page, limit, author, date } = req.query;
+  const { page, limit, date } = req.query;
   const query = {};
   const L = limit ? parseInt(limit) : 3;
   const P = page ? parseInt(page) : 1;
@@ -10,7 +10,7 @@ export const getAllUser = async (req, res, next) => {
     query.createdAt = { $gte: date };
   }
   try {
-    const users = await User.find()
+    const users = await User.find(query)
       .select('-password')
       .skip((P - 1) * L)
       .limit(L);
